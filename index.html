@@ -60,6 +60,8 @@
     .videos-heading h2 { margin: 10px 0; font: 400 clamp(32px, 4vw, 46px)/1 var(--serif); letter-spacing: -.04em; }
     .videos-heading p { max-width: 600px; color: var(--muted); font-size: 13px; line-height: 1.7; }
     .videos-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(190px, .65fr); align-items: center; justify-items: center; gap: 35px; max-width: 850px; margin: 0 auto; }
+    .modal-video { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .modal-video h4 { margin: 0 0 10px; font: 20px var(--serif); }
     .video-card { width: 100%; min-width: 0; padding: 18px; background: var(--cream); border: 1px solid var(--line); }
     .video-card h3 { margin: 0 0 8px; font: 23px var(--serif); }
     .video-card p { margin: 0 0 15px; color: var(--muted); font-size: 11px; line-height: 1.6; }
@@ -117,6 +119,10 @@
     .save[aria-pressed="true"] { color: #a12c49; }
     .detail-button { border: 0; padding: 7px 0; background: transparent; color: var(--wine); cursor: pointer; font-size: 10px; font-weight: bold; }
     .compare-check { display: flex; align-items: center; gap: 6px; color: var(--wine); font-size: 10px; }
+    .group-title { grid-column: 1/-1; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px; margin: 30px 0 2px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .group-title:first-child { margin-top: 0; }
+    .group-title h3 { margin: 0; font: 400 clamp(28px, 3.4vw, 38px)/1 var(--serif); letter-spacing: -.035em; }
+    .group-title span { color: var(--wine); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
     .empty { grid-column: 1/-1; padding: 40px; border: 1px dashed var(--line); color: var(--muted); text-align: center; }
 
     .wide-photo { position: relative; min-height: 430px; overflow: hidden; color: white; }
@@ -369,13 +375,14 @@
       <span class="hero-caption">Fotografía ilustrativa · Unsplash</span>
     </section>
 
-    <!-- VIDEOS: uno horizontal y otro vertical -->
+    <!-- VIDEOS: primero los horizontales en fila, luego los verticales (Shorts) en fila -->
     <section class="videos-section" id="videos">
       <div class="videos-heading">
         <span class="kicker">Mendoza en movimiento</span>
         <h2>Viví Mendoza en video.</h2>
         <p>Descubrí paisajes, experiencias y rincones de la provincia a través de estos videos.</p>
       </div>
+
       <div class="videos-grid">
         <article class="video-card">
           <h3>Conocé Mendoza</h3>
@@ -624,16 +631,33 @@
 
     const places = [
       {id:"aconcagua",lat:-32.653,long:-70.010,name:"Parque Provincial Aconcagua",category:"Naturaleza",region:"Las Heras · Alta montaña",kind:"Naturaleza",photo:"photo-1464822759023-fed622ff2c3b",alt:"Cumbres de una cordillera",description:"Paisajes de alta montaña en torno al cerro Aconcagua. Consultá permisos y condiciones oficiales.",query:"Parque Provincial Aconcagua Mendoza Argentina",tags:"montaña senderismo naturaleza"},
-      {id:"potrerillos",lat:-32.947,long:-69.156,name:"Embalse de Potrerillos",category:"Naturaleza",region:"Luján de Cuyo",kind:"Naturaleza",photo:"photo-1500530855697-b586d89ba3ee",alt:"Paisaje de valle y montañas",description:"Un paisaje de agua y montaña al oeste de la ciudad. Revisá las condiciones locales antes de ir.",query:"Embalse Potrerillos Mendoza Argentina",tags:"montaña agua naturaleza"},
-      {id:"puente-inca",lat:-32.825,long:-69.905,name:"Puente del Inca",category:"Naturaleza",region:"Las Heras · Alta montaña",kind:"Naturaleza",photo:"photo-1470252649378-9c29740c9fa8",alt:"Paisaje natural iluminado al atardecer",description:"Sitio natural emblemático de la ruta de alta montaña. Verificá estado de caminos y condiciones.",query:"Puente del Inca Mendoza Argentina",tags:"montaña naturaleza historia"},
-      {id:"parque-san-martin",lat:-32.889,long:-68.878,name:"Parque General San Martín",category:"Naturaleza",region:"Ciudad de Mendoza",kind:"Naturaleza",photo:"photo-1441974231531-c6227db76b6e",alt:"Sendero rodeado de árboles",description:"Un amplio espacio verde urbano para recorrer y disfrutar del arbolado de la ciudad.",query:"Parque General San Martín Mendoza Argentina",tags:"ciudad parque paseo"},
+      {id:"potrerillos",video:"J2JQ7ls4M3Q",vtitle:"Dique Potrerillos",vshort:true,lat:-32.947,long:-69.156,name:"Embalse de Potrerillos",category:"Naturaleza",region:"Luján de Cuyo",kind:"Naturaleza",photo:"photo-1500530855697-b586d89ba3ee",alt:"Paisaje de valle y montañas",description:"Un paisaje de agua y montaña al oeste de la ciudad (Dique Potrerillos). Revisá las condiciones locales antes de ir.",query:"Embalse Potrerillos Mendoza Argentina",tags:"montaña agua naturaleza dique paseo"},
+      {id:"puente-inca",lat:-32.825,long:-69.905,name:"Puente del Inca",category:"Naturaleza",region:"Las Heras · Alta montaña",kind:"Naturaleza",photo:"photo-1470252649378-9c29740c9fa8",alt:"Paisaje natural iluminado al atardecer",description:"Sitio natural emblemático de la ruta de alta montaña. Verificá estado de caminos y condiciones.",query:"Puente del Inca Mendoza Argentina",tags:"montaña naturaleza historia paseo"},
+      {id:"parque-san-martin",video:"0h74iowFWh0",vtitle:"Parque General San Martín",vshort:false,lat:-32.889,long:-68.878,name:"Parque General San Martín",category:"Naturaleza",region:"Ciudad de Mendoza",kind:"Naturaleza",photo:"photo-1441974231531-c6227db76b6e",alt:"Sendero rodeado de árboles",description:"Un amplio espacio verde urbano para recorrer y disfrutar del arbolado de la ciudad.",query:"Parque General San Martín Mendoza Argentina",tags:"ciudad parque paseo plaza"},
       {id:"cerro-gloria",lat:-32.889,long:-68.877,name:"Cerro de la Gloria",category:"Cultura",region:"Ciudad de Mendoza",kind:"Historia y cultura",photo:"photo-1464822759023-fed622ff2c3b",alt:"Montañas bajo el cielo abierto",description:"Monumento y mirador en el Parque General San Martín, dedicado al Ejército de los Andes.",query:"Cerro de la Gloria Mendoza Argentina",tags:"historia cultura monumento"},
       {id:"catena",lat:-33.039,long:-68.873,name:"Bodega Catena Zapata",category:"Bodega",region:"Luján de Cuyo",kind:"Bodega",photo:"photo-1504279577054-acfeccf8fc52",alt:"Hileras de viñedos verdes",description:"Bodega mendocina conocida por su arquitectura. Confirmá visitas y experiencias directamente.",query:"Bodega Catena Zapata Mendoza Argentina",tags:"vino viñedos visita"},
       {id:"trapiche",lat:-33.006,long:-68.783,name:"Bodega Trapiche",category:"Bodega",region:"Maipú",kind:"Bodega",photo:"photo-1510812431401-41d2bd2722f3",alt:"Copas de vino sobre una mesa",description:"Referencia vitivinícola de Maipú. La oferta de visitas puede variar: consultá sus canales oficiales.",query:"Bodega Trapiche Maipu Mendoza Argentina",tags:"vino viñedos degustación"},
       {id:"casa-vigil",lat:-33.013,long:-68.681,name:"Casa Vigil",category:"Gastronomía",region:"Maipú",kind:"Gastronomía",photo:"photo-1414235077428-338989a2e8c0",alt:"Plato servido en una mesa de restaurante",description:"Propuesta gastronómica en Maipú. Consultá menú, horarios y reservas con el establecimiento.",query:"Casa Vigil Chachingo Mendoza Argentina",tags:"comida restaurante vino"},
       {id:"hyatt",lat:-32.891,long:-68.845,name:"Park Hyatt Mendoza",category:"Hotel",region:"Ciudad de Mendoza",kind:"Hotel",photo:"photo-1566073771259-6a8506099945",alt:"Hotel con piscina y jardines",description:"Hotel céntrico frente a Plaza Independencia. Tarifas y disponibilidad dependen de las fechas.",query:"Park Hyatt Mendoza Argentina",tags:"hotel alojamiento ciudad"},
       {id:"diplomatic",lat:-32.891,long:-68.858,name:"Diplomatic Hotel",category:"Hotel",region:"Ciudad de Mendoza",kind:"Hotel",photo:"photo-1542314831-068cd1dbfeeb",alt:"Hotel con iluminación cálida",description:"Alojamiento en la ciudad. Consultá directamente servicios, disponibilidad y tarifas actuales.",query:"Diplomatic Hotel Mendoza Argentina",tags:"hotel alojamiento ciudad"},
-      {id:"valle-uco",lat:-33.500,long:-69.250,name:"Paisajes del Valle de Uco",category:"Actividad",region:"Valle de Uco",kind:"Actividad",photo:"photo-1504279577054-acfeccf8fc52",alt:"Viñedos extendidos en un valle",description:"Región de paisajes andinos y vitivinícolas. Planificá traslados y visitas con cada proveedor.",query:"Valle de Uco Mendoza Argentina",tags:"actividad naturaleza vino excursión"}
+      {id:"valle-uco",video:"co2pAjZN-u0",vtitle:"Bodegas del Valle de Uco",vshort:true,lat:-33.500,long:-69.250,name:"Paisajes del Valle de Uco",category:"Actividad",region:"Valle de Uco",kind:"Actividad",photo:"photo-1504279577054-acfeccf8fc52",alt:"Viñedos extendidos en un valle",description:"Región de paisajes andinos y vitivinícolas. Planificá traslados y visitas con cada proveedor.",query:"Valle de Uco Mendoza Argentina",tags:"actividad naturaleza vino excursión"},
+
+      /* LUGARES NUEVOS (todos juntos, sin separar por secciones) */
+      {id:"zuccardi",video:"co2pAjZN-u0",vtitle:"Bodegas del Valle de Uco",vshort:true,lat:-33.745,long:-69.100,name:"Bodega Zuccardi – Valle de Uco",category:"Bodega",region:"Valle de Uco",kind:"Bodega",photo:"photo-1504279577054-acfeccf8fc52",alt:"Viñedos extendidos en un valle",description:"Bodega ubicada en el Valle de Uco, rodeada de viñedos. Confirmá visitas y experiencias directamente.",query:"Bodega Zuccardi Valle de Uco Mendoza Argentina",tags:"vino viñedos visita degustación gastronomía"},
+      {id:"salentein",video:"co2pAjZN-u0",vtitle:"Bodegas del Valle de Uco",vshort:true,lat:-33.780,long:-69.200,name:"Bodega Salentein",category:"Bodega",region:"Valle de Uco",kind:"Bodega",photo:"photo-1510812431401-41d2bd2722f3",alt:"Copas de vino sobre una mesa",description:"Bodega del Valle de Uco con paisajes de viñedos y montaña. Consultá horarios y reservas con el establecimiento.",query:"Bodega Salentein Valle de Uco Mendoza Argentina",tags:"vino viñedos visita degustación"},
+      {id:"santa-julia",lat:-33.000,long:-68.750,name:"Cocina de Bodega Santa Julia",category:"Gastronomía",region:"Maipú",kind:"Gastronomía",photo:"photo-1414235077428-338989a2e8c0",alt:"Plato servido en una mesa de restaurante",description:"Propuesta de cocina en una bodega de Maipú. Consultá menú, horarios y reservas con el establecimiento.",query:"Bodega Santa Julia Maipu Mendoza Argentina",tags:"comida restaurante vino bodega"},
+      {id:"area-fundacional",lat:-32.8845,long:-68.8215,name:"Museo del Área Fundacional",category:"Cultura",region:"Ciudad de Mendoza",kind:"Museo",photo:"photo-1441974231531-c6227db76b6e",alt:"Espacio cultural al aire libre",description:"Museo dedicado a los orígenes de la ciudad de Mendoza. Verificá horarios y condiciones de acceso.",query:"Museo del Área Fundacional Mendoza Argentina",tags:"museo historia cultura ciudad"},
+      {id:"museo-vino",video:"kXeGf5A69qQ",vtitle:"Museo Nacional del Vino y la Vendimia",vshort:true,lat:-32.935,long:-68.864,name:"Museo Nacional del Vino y la Vendimia",category:"Cultura",region:"Godoy Cruz",kind:"Museo",photo:"photo-1510812431401-41d2bd2722f3",alt:"Copas de vino sobre una mesa",description:"Museo sobre la cultura del vino y la vendimia en Godoy Cruz. Consultá horarios y visitas.",query:"Museo Nacional del Vino y la Vendimia Godoy Cruz Mendoza",tags:"museo vino vendimia cultura"},
+      {id:"moyano",lat:-32.8918,long:-68.8765,name:"Museo Cornelio Moyano",category:"Cultura",region:"Ciudad de Mendoza",kind:"Museo",photo:"photo-1464822759023-fed622ff2c3b",alt:"Montañas bajo el cielo abierto",description:"Museo de ciencias naturales y antropológicas en Mendoza. Confirmá horarios antes de visitarlo.",query:"Museo Cornelio Moyano Mendoza Argentina",tags:"museo ciencia naturaleza cultura"},
+      {id:"arte-moderno",lat:-32.8908,long:-68.8441,name:"Museo Municipal de Arte Moderno",category:"Cultura",region:"Ciudad de Mendoza",kind:"Museo",photo:"photo-1542314831-068cd1dbfeeb",alt:"Espacio con iluminación cálida",description:"Museo de arte moderno en el centro de la ciudad. Verificá exposiciones y horarios vigentes.",query:"Museo Municipal de Arte Moderno Mendoza Argentina",tags:"museo arte cultura ciudad"},
+      {id:"plaza-independencia",video:"1SIeUr326PE",vtitle:"Plaza Independencia",vshort:false,lat:-32.8908,long:-68.8446,name:"Plaza Independencia",category:"Naturaleza",region:"Ciudad de Mendoza",kind:"Plaza",photo:"photo-1441974231531-c6227db76b6e",alt:"Plaza rodeada de árboles",description:"Plaza central de la ciudad, para pasear de día y verla iluminada de noche.",query:"Plaza Independencia Mendoza Argentina",tags:"plaza ciudad paseo noche iluminada"},
+      {id:"plaza-espana",lat:-32.8875,long:-68.8467,name:"Plaza España",category:"Naturaleza",region:"Ciudad de Mendoza",kind:"Plaza",photo:"photo-1441974231531-c6227db76b6e",alt:"Sendero rodeado de árboles",description:"Plaza de la ciudad de Mendoza, ideal para una pausa durante el recorrido urbano.",query:"Plaza España Mendoza Argentina",tags:"plaza ciudad paseo"},
+      {id:"parque-central",lat:-32.8905,long:-68.8365,name:"Parque Central",category:"Naturaleza",region:"Ciudad de Mendoza",kind:"Parque",photo:"photo-1441974231531-c6227db76b6e",alt:"Parque con árboles y senderos",description:"Espacio verde urbano para caminar y descansar. Verificá la ubicación exacta en el mapa.",query:"Parque Central Mendoza Argentina",tags:"parque ciudad paseo"},
+      {id:"cacheuta",video:"MCAlM7fFO7c",vtitle:"Termas de Cacheuta",vshort:true,lat:-33.000,long:-69.100,name:"Termas de Cacheuta",category:"Actividad",region:"Luján de Cuyo",kind:"Paseo",photo:"photo-1500530855697-b586d89ba3ee",alt:"Paisaje de valle y montañas",description:"Paseo de montaña con propuestas de termas. Consultá servicios, horarios y tarifas actuales.",query:"Termas de Cacheuta Mendoza Argentina",tags:"termas paseo montaña actividad"},
+      {id:"villavicencio",lat:-32.520,long:-69.000,name:"Reserva Natural Villavicencio",category:"Naturaleza",region:"Las Heras",kind:"Naturaleza",photo:"photo-1470252649378-9c29740c9fa8",alt:"Paisaje natural iluminado al atardecer",description:"Reserva natural en la precordillera. Consultá accesos, permisos y estado de los caminos.",query:"Reserva Natural Villavicencio Mendoza Argentina",tags:"reserva naturaleza paseo montaña"},
+      {id:"atuel",lat:-34.800,long:-68.600,name:"Cañón del Atuel",category:"Naturaleza",region:"San Rafael",kind:"Paseo",photo:"photo-1500530855697-b586d89ba3ee",alt:"Amplio paisaje natural de montaña",description:"Paisaje de cañón y río en San Rafael, al sur de la provincia. Planificá traslados y excursiones con anticipación.",query:"Cañón del Atuel San Rafael Mendoza Argentina",tags:"cañón río paseo naturaleza actividad"},
+      {id:"villanueva",video:"cp2qikKpFPY",vtitle:"Avenida Arístides Villanueva",vshort:true,lat:-32.900,long:-68.860,name:"Avenida Arístides Villanueva",category:"Actividad",region:"Ciudad de Mendoza",kind:"Mendoza de noche",photo:"photo-1542314831-068cd1dbfeeb",alt:"Calle con iluminación cálida",description:"Avenida de la ciudad para salir de noche, con bares y restaurantes. Consultá horarios de cada local.",query:"Avenida Arístides Villanueva Mendoza Argentina",tags:"noche salir bares restaurantes ciudad"},
+      {id:"sarmiento",lat:-32.8895,long:-68.8400,name:"Calle Sarmiento (peatonal)",category:"Actividad",region:"Ciudad de Mendoza",kind:"Mendoza de noche",photo:"photo-1414235077428-338989a2e8c0",alt:"Calle peatonal con locales",description:"Peatonal céntrica para caminar, y para recorrerla también de noche. Verificá horarios de los locales.",query:"Peatonal Sarmiento Mendoza Argentina",tags:"noche peatonal ciudad paseo"}
     ];
 
     const KEY = "mendoza-infinita-favoritos-v1";
@@ -708,8 +732,29 @@
         </div>
       </article>`;
     }
-    function renderCards(element, list) {
-      element.innerHTML = list.length ? list.map(card).join("") :
+    const placeGroups = [
+      ["bodegas", "Bodegas", "Vino y viñedos"],
+      ["gastronomia", "Gastronomía", "Para sentarse a la mesa"],
+      ["cultura", "Museos y cultura", "Historia y arte"],
+      ["naturaleza", "Parques, plazas y paisajes", "Aire libre"],
+      ["actividad", "Paseos y actividades", "Excursiones"],
+      ["noche", "Mendoza de noche", "Después del atardecer"],
+      ["hoteles", "Hoteles", "Dónde quedarse"]
+    ];
+    function groupKey(place) {
+      if (place.kind === "Mendoza de noche") return "noche";
+      return {"Bodega":"bodegas","Gastronomía":"gastronomia","Cultura":"cultura","Naturaleza":"naturaleza","Actividad":"actividad","Hotel":"hoteles"}[place.category] || "actividad";
+    }
+    function groupedHtml(list) {
+      return placeGroups.map(([key, title, label]) => {
+        const items = list.filter(place => groupKey(place) === key);
+        return items.length
+          ? `<div class="group-title" id="grupo-${key}"><h3>${escapeHtml(title)}</h3><span>${escapeHtml(label)} · ${items.length}</span></div>` + items.map(card).join("")
+          : "";
+      }).join("");
+    }
+    function renderCards(element, list, grouped) {
+      element.innerHTML = list.length ? (grouped ? groupedHtml(list) : list.map(card).join("")) :
         '<div class="empty">No encontramos resultados. Probá otra búsqueda o limpiá los filtros.</div>';
       element.querySelectorAll("img").forEach(img => img.addEventListener("error", () => {
         img.alt = "Imagen no disponible";
@@ -721,7 +766,7 @@
       const category = $("category").value;
       const region = $("region").value;
       return places.filter(place => {
-        const searchable = `${place.name} ${place.category} ${place.region} ${place.description} ${place.tags}`.toLocaleLowerCase("es");
+        const searchable = `${place.name} ${place.category} ${place.kind} ${place.region} ${place.description} ${place.tags}`.toLocaleLowerCase("es");
         return (!term || searchable.includes(term)) &&
           (!category || category === place.category) &&
           (!region || region === place.region);
@@ -741,7 +786,7 @@
       $("clearFavorites").disabled = list.length === 0;
     }
     function updatePlaceResults() {
-      renderCards($("placeCards"), filteredPlaces());
+      renderCards($("placeCards"), filteredPlaces(), true);
       $("resultCount").textContent = `${filteredPlaces().length} lugares encontrados`;
     }
     function renderAll() {
@@ -787,14 +832,19 @@
     }
 
     /* FICHA DEL DESTINO */
+    function videoHtml(p) {
+      if (!p.video) return "";
+      const frame = p.vshort ? "short-frame" : "video-frame";
+      return `<div class="modal-video"><h4>${escapeHtml(p.vtitle)}</h4><div class="${frame}"><iframe src="https://www.youtube.com/embed/${encodeURIComponent(p.video)}" title="${escapeHtml(p.vtitle)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div></div>`;
+    }
     function showDetails(id) {
       const p = places.find(x => x.id === id);
       if (!p) return;
-      $("infoContent").innerHTML = `<img src="${imageUrl(p.photo)}" alt="${escapeHtml(p.alt)}"><h3 id="infoTitle">${escapeHtml(p.name)}</h3><p><strong>${escapeHtml(p.category)}</strong> · ${escapeHtml(p.region)}</p><p>${escapeHtml(p.description)}</p><p class="note">La imagen es ilustrativa. Confirmá información práctica directamente con el establecimiento o la autoridad correspondiente.</p><a class="button gold" href="${mapUrl(p)}" target="_blank" rel="noopener noreferrer">Ver ubicación ↗</a>`;
+      $("infoContent").innerHTML = `<img src="${imageUrl(p.photo)}" alt="${escapeHtml(p.alt)}"><h3 id="infoTitle">${escapeHtml(p.name)}</h3><p><strong>${escapeHtml(p.category)}</strong> · ${escapeHtml(p.region)}</p><p>${escapeHtml(p.description)}</p><p class="note">La imagen es ilustrativa. Confirmá información práctica directamente con el establecimiento o la autoridad correspondiente.</p><a class="button gold" href="${mapUrl(p)}" target="_blank" rel="noopener noreferrer">Ver ubicación ↗</a>${videoHtml(p)}`;
       $("infoBackdrop").classList.add("open");
       $("closeInfo").focus();
     }
-    function closeDetails() { $("infoBackdrop").classList.remove("open"); }
+    function closeDetails() { $("infoBackdrop").classList.remove("open"); $("infoContent").innerHTML = ""; }
 
     /* INICIALIZACIÓN DE FILTROS */
     [...new Set(places.map(place => place.region))]
